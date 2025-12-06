@@ -1,0 +1,13 @@
+[project]
+name = "root-test"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "click>=8.3.1",
+    "ipython>=8.18.1",
+    "jupyterlab>=4.4.10",
+    "mplhep>=0.4.1",
+    "pandas>=2.3.3",
+    "rich>=14.2.0",
+    "root>=0.1a9",
+]
