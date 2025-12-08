@@ -16,17 +16,21 @@ import concurrent.futures
 @click.argument('ntuple_files', type=click.Path(dir_okay=False, exists=True), nargs=-1)
 @click.option('-o', '--outdir', type=click.Path(file_okay=False), default='data')
 def main(ntuple_files, outdir):
-    """Utility script to fix duplicated event numbers in grid jobs.
 
-    The event numners are overwritten adding 10*<job number> to the original event number.
 
-    Args:
-        ntuple_files (_type_): _description_
-        outdir (_type_): _description_
+    cfg = {
+        'top_trees_mask': [
+            'event_summary',
+            # 'mctruths',
+            # 'mcneutrinos'
+        ],
+        'tp_cut': {
+            'sot_cut': 'samples_over_threshold >= 8'
+        }
+    }
 
-    Returns:
-        _type_: _description_
-    """
+
+
     ntuple_regex = re.compile(r'(.*)_(\d+)_ana\.ntuple\.root$')
     no_match = []
     ntuple_list = {}
@@ -66,7 +70,7 @@ def main(ntuple_files, outdir):
             print(f"Failed to open file {k} - skipping")
             return None
 
-        outpath=f'{outdir}/{nt_base}_{k}_evfix_ana.ntuple.root'
+        outpath=f'{outdir}/{nt_base}_{k}_tp_cut_ana.ntuple.root'
         print(f"Saving fixed ntuples to {outpath}")
 
 
@@ -77,11 +81,25 @@ def main(ntuple_files, outdir):
 
         rso = ROOT.RDF.RSnapshotOptions()
         rso.fMode = "UPDATE"
-        # rso.fOutputFormat = ROOT.RDF.ESnapshotOutputFormat.kRNTuple
+        rso.fOutputFormat = ROOT.RDF.ESnapshotOutputFormat.kRNTuple
 
-        for t in tree_names+tp_tree_names:
+        tree_names = [ t for t in tree_names if t in cfg['top_trees_mask']]
+
+        for t in tree_names:
+            # print(f"-> processing {t}")
+
             rdf = ROOT.RDataFrame(f'triggerAna/{t}', nt_path)
             rdf_up = rdf.Redefine('event', f'event+{k*10}')
+            rdf_up.Snapshot(f'triggerAna/{t}', outpath, options=rso)
+
+        for t in tp_tree_names:
+            # print(f"-> processing {t}")
+            rdf = ROOT.RDataFrame(f'triggerAna/{t}', nt_path)
+            rdf_up = rdf.Redefine('event', f'event+{k*10}')
+            for n, c in cfg['tp_cut'].items():
+                # print(f"adding filter {n} {c}")
+                rdf_up = rdf_up.Filter(c, n)
+            
             rdf_up.Snapshot(f'triggerAna/{t}', outpath, options=rso)
 
         with ROOT.TFile(outpath, "UPDATE") as outfile:
@@ -99,6 +117,7 @@ def main(ntuple_files, outdir):
                 data = future.result()
             except Exception as exc:
                 print('%r generated an exception: %s' % (k, exc))
+                print(type(exc))
             else:
                 print(f"File {data} completed")
 
