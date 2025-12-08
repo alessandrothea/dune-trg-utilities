@@ -317,6 +317,31 @@ wheels = [
 ]
 
 [[package]]
+name = "dune-trg-utils"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "click" },
+    { name = "ipython" },
+    { name = "jupyterlab" },
+    { name = "mplhep" },
+    { name = "pandas" },
+    { name = "rich" },
+    { name = "root" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", specifier = ">=8.3.1" },
+    { name = "ipython", specifier = ">=8.18.1" },
+    { name = "jupyterlab", specifier = ">=4.4.10" },
+    { name = "mplhep", specifier = ">=0.4.1" },
+    { name = "pandas", specifier = ">=2.3.3" },
+    { name = "rich", specifier = ">=14.2.0" },
+    { name = "root", specifier = "==0.1a9" },
+]
+
+[[package]]
 name = "executing"
 version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1371,31 +1396,6 @@ dependencies = [
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a9/78/0757bffd0ee6d65de27fb3ddc8e632a5ec35e98dc6eb382252a8dd63780a/root-0.1a9-cp314-cp314-manylinux_2_28_x86_64.whl", hash = "sha256:22553fc094bb186a6712c501c880a6a526f2ebae40e7fdb59b1aa7f591b31c9f", size = 243451997, upload-time = "2025-11-28T17:58:14.719Z" },
-]
-
-[[package]]
-name = "root-test"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "click" },
-    { name = "ipython" },
-    { name = "jupyterlab" },
-    { name = "mplhep" },
-    { name = "pandas" },
-    { name = "rich" },
-    { name = "root" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "click", specifier = ">=8.3.1" },
-    { name = "ipython", specifier = ">=8.18.1" },
-    { name = "jupyterlab", specifier = ">=4.4.10" },
-    { name = "mplhep", specifier = ">=0.4.1" },
-    { name = "pandas", specifier = ">=2.3.3" },
-    { name = "rich", specifier = ">=14.2.0" },
-    { name = "root", specifier = ">=0.1a9" },
 ]
 
 [[package]]
