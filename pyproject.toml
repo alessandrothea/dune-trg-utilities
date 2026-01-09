@@ -3,6 +3,7 @@ name = "dune-trg-utils"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "awkward-pandas>=2023.8.0",
     "click>=8.3.1",
     "ipython>=8.18.1",
     "jupyterlab>=4.4.10",
@@ -10,4 +11,5 @@ dependencies = [
     "pandas>=2.3.3",
     "rich>=14.2.0",
     "root==0.1a9",
+    "uproot>=5.6.9",
 ]
